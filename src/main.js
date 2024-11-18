@@ -251,6 +251,123 @@ async function printPDFFromTemplate(templatePath) {
         "Design Thinking & Legal Design",
       ],
     },
+    skillBands: [
+      {
+        name: "Digital Dexterity",
+        bandings: {
+          1: {
+            requirements: "Basic awareness of digital tools and technologies, with an ability to use them for simple tasks.",
+          },
+          2: {
+            requirements: "Ability to effectively use digital tools for routine tasks, with some understanding of their functionalities and integration.",
+          },
+          3: {
+            requirements: "Proficient in using digital tools to optimize daily tasks; familiar with multiple tools and how they integrate in a digital workspace.",
+          },
+          4: {
+            requirements: "Advanced proficiency in utilizing digital tools for complex tasks, with an understanding of automation and integration across platforms.",
+          },
+          5: {
+            requirements: "Expert in integrating and managing multiple digital tools, utilizing them for strategic decision-making and workflow optimization.",
+          },
+          6: {
+            requirements: "Thought leader in digital technologies; able to guide and train others, driving innovation and transformation in the digital workspace.",
+          },
+        },
+      },
+      {
+        name: "Communication Skills",
+        bandings: {
+          1: {
+            requirements: "Able to clearly communicate basic ideas in written and verbal formats, with some awareness of audience and context.",
+          },
+          2: {
+            requirements: "Able to convey ideas and information clearly in both written and verbal formats, understanding the importance of tone and clarity for different audiences.",
+          },
+          3: {
+            requirements: "Skilled in communicating complex ideas effectively; adjusts communication style to suit the audience and context.",
+          },
+          4: {
+            requirements: "Expert communicator, able to engage diverse audiences and effectively manage difficult conversations or negotiations.",
+          },
+          5: {
+            requirements: "Able to lead communication strategies, influencing key stakeholders and guiding teams through complex projects and discussions.",
+          },
+          6: {
+            requirements: "A recognized thought leader in communication, shaping organizational strategies, culture, and aligning teams through effective communication.",
+          },
+        },
+      },
+      {
+        name: "Problem Solving",
+        bandings: {
+          1: {
+            requirements: "Able to approach simple problems with standard solutions, using basic critical thinking skills.",
+          },
+          2: {
+            requirements: "Able to identify problems and propose logical solutions, using basic analysis and reasoning.",
+          },
+          3: {
+            requirements: "Able to tackle complex problems by breaking them down into smaller components and applying structured problem-solving techniques.",
+          },
+          4: {
+            requirements: "Proficient at addressing complex and ambiguous problems, with an ability to synthesize information and propose innovative solutions.",
+          },
+          5: {
+            requirements: "Able to solve high-impact problems that influence strategic decisions, leveraging advanced problem-solving frameworks and techniques.",
+          },
+          6: {
+            requirements: "Recognized as an expert in problem solving, able to guide teams through the most challenging and ambiguous issues, driving organizational change.",
+          },
+        },
+      },
+      {
+        name: "Leadership",
+        bandings: {
+          1: {
+            requirements: "Demonstrates basic leadership qualities, including the ability to manage small teams and make decisions for routine tasks.",
+          },
+          2: {
+            requirements: "Able to lead teams for more complex projects, taking responsibility for decisions and providing guidance for others.",
+          },
+          3: {
+            requirements: "Skilled in leading teams of varying sizes, ensuring alignment to organizational goals and adapting leadership style to meet team needs.",
+          },
+          4: {
+            requirements: "Able to lead cross-functional teams, aligning multiple stakeholders and fostering collaboration to drive major initiatives and strategic outcomes.",
+          },
+          5: {
+            requirements: "A strong strategic leader, able to lead large teams or departments, develop organizational strategies, and manage complex change initiatives.",
+          },
+          6: {
+            requirements: "Visionary leader, able to inspire and drive transformation at an organizational level, influencing culture, and shaping the future direction of the company.",
+          },
+        },
+      },
+      {
+        name: "Project Management",
+        bandings: {
+          1: {
+            requirements: "Able to manage basic projects with clear goals, deadlines, and deliverables, using basic project management tools.",
+          },
+          2: {
+            requirements: "Capable of managing more complex projects, ensuring deliverables are met within scope, time, and budget constraints.",
+          },
+          3: {
+            requirements: "Experienced in managing projects with multiple stakeholders, risks, and changing requirements, while maintaining focus on outcomes.",
+          },
+          4: {
+            requirements: "Able to lead large, cross-functional projects, managing project teams, resources, and timelines to deliver strategic business results.",
+          },
+          5: {
+            requirements: "Skilled in overseeing a portfolio of projects, with an ability to optimize resource allocation, manage interdependencies, and mitigate risks.",
+          },
+          6: {
+            requirements: "A recognized expert in project management, capable of leading large-scale, transformative initiatives and guiding others in advanced project management methodologies.",
+          },
+        },
+      },
+    ]
   });
 
   const browser = await puppeteer.launch({ headless: true });
@@ -265,10 +382,10 @@ async function printPDFFromTemplate(templatePath) {
     printBackground: true,
     scale: 1,
     margin: {
-      top: "20mm",
-      right: "20mm",
-      bottom: "20mm",
-      left: "20mm",
+      top: "0mm",
+      right: "0mm",
+      bottom: "0mm",
+      left: "0mm",
     },
   });
 
