@@ -1,0 +1,28 @@
+{
+  "name": "pdf-gen",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc && node dist/temp-gen.js",
+    "pdf": "node src/main.js",
+    "dev-pdf": "npm run dev && npm run pdf"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "puppeteer": "^23.8.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.9.0",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.6.3"
+  }
+}
