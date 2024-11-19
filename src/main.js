@@ -595,7 +595,7 @@ async function printPDFFromTemplate(templatePath) {
           },
         },
       },
-    ]
+    ],
   });
 
   const browser = await puppeteer.launch({ headless: true });

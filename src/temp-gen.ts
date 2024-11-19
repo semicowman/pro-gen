@@ -1,5 +1,11 @@
 import * as fs from "fs";
-import { skillCompetenciesScript, reportScript, detailedSkillCompetenciesScript, componentsScript, bandingScript } from "./scriptInjections.js";
+import {
+  skillCompetenciesScript,
+  reportScript,
+  detailedSkillCompetenciesScript,
+  componentsScript,
+  bandingScript,
+} from "./scriptInjections.js";
 
 const USE_MOCK_DATA = false;
 const OUTPUT_FILENAME = "src/index.html";
@@ -123,7 +129,7 @@ function generateCompetenciesDetails(): string {
 }
 
 const generateSkillsBandInfo = () => {
-return `
+  return `
     <div class="my-4 pr-6">
     <p class="text-blue-800 my-4">Skill Banding Structure</p>
     ${HrSeperator()}
@@ -131,7 +137,7 @@ return `
     <div id="banding-skills"></div>
   </div>
 `;
-}
+};
 
 const generateCompetenciesBandInfo = () => {
   return `
@@ -142,7 +148,7 @@ const generateCompetenciesBandInfo = () => {
       <div id="banding-competencies"></div>
     </div>
   `;
-  }
+};
 
 function generateHtmlFile(
   filename: string,
@@ -166,9 +172,21 @@ function generateHtmlFile(
     BIND_DEFINES.competencies,
     USE_MOCK_DATA
   )}
-  ${reportScript(BIND_DEFINES.skillChart, BIND_DEFINES.competenciesChart, USE_MOCK_DATA)}
-  ${detailedSkillCompetenciesScript(BIND_DEFINES.skills, BIND_DEFINES.competencies, USE_MOCK_DATA)}
-  ${bandingScript(BIND_DEFINES.bandingSkills, BIND_DEFINES.bandingCompetencies, USE_MOCK_DATA)}
+  ${reportScript(
+    BIND_DEFINES.skillChart,
+    BIND_DEFINES.competenciesChart,
+    USE_MOCK_DATA
+  )}
+  ${detailedSkillCompetenciesScript(
+    BIND_DEFINES.skills,
+    BIND_DEFINES.competencies,
+    USE_MOCK_DATA
+  )}
+  ${bandingScript(
+    BIND_DEFINES.bandingSkills,
+    BIND_DEFINES.bandingCompetencies,
+    USE_MOCK_DATA
+  )}
 </html>
 `;
 

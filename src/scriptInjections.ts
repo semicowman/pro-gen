@@ -477,8 +477,14 @@ const detailedSkillCompetenciesScript = (
         requirements:
           "Understanding and utilizing modern digital tools and technologies.",
         courses: [
-          { name: "Introduction to Digital Tools", url: "https://www.example.com/course1" },
-          { name: "Advanced Digital Skills for Professionals", url: "https://www.example.com/course2" },
+          {
+            name: "Introduction to Digital Tools",
+            url: "https://www.example.com/course1",
+          },
+          {
+            name: "Advanced Digital Skills for Professionals",
+            url: "https://www.example.com/course2",
+          },
         ],
       },
       {
@@ -487,8 +493,14 @@ const detailedSkillCompetenciesScript = (
         requirements:
           "Effective management of legal projects, teams, and resources.",
         courses: [
-          { name: "Legal Project Management Fundamentals", url: "https://www.example.com/course3" },
-          { name: "Managing Legal Risks", url: "https://www.example.com/course4" },
+          {
+            name: "Legal Project Management Fundamentals",
+            url: "https://www.example.com/course3",
+          },
+          {
+            name: "Managing Legal Risks",
+            url: "https://www.example.com/course4",
+          },
         ],
       },
       {
@@ -497,8 +509,14 @@ const detailedSkillCompetenciesScript = (
         requirements:
           "Understanding of market trends and ability to develop strategies to grow business.",
         courses: [
-          { name: "Market Analysis and Business Strategies", url: "https://www.example.com/course5" },
-          { name: "Advanced Business Development Techniques", url: "https://www.example.com/course6" },
+          {
+            name: "Market Analysis and Business Strategies",
+            url: "https://www.example.com/course5",
+          },
+          {
+            name: "Advanced Business Development Techniques",
+            url: "https://www.example.com/course6",
+          },
         ],
       },
     ],
@@ -509,8 +527,14 @@ const detailedSkillCompetenciesScript = (
         requirements:
           "Ability to work effectively with others to achieve common goals.",
         courses: [
-          { name: "Team Collaboration in the Workplace", url: "https://www.example.com/course7" },
-          { name: "Effective Communication in Teams", url: "https://www.example.com/course8" },
+          {
+            name: "Team Collaboration in the Workplace",
+            url: "https://www.example.com/course7",
+          },
+          {
+            name: "Effective Communication in Teams",
+            url: "https://www.example.com/course8",
+          },
         ],
       },
       {
@@ -519,8 +543,14 @@ const detailedSkillCompetenciesScript = (
         requirements:
           "Inspiring and leading teams towards success, with focus on decision-making and management.",
         courses: [
-          { name: "Leadership Essentials", url: "https://www.example.com/course9" },
-          { name: "Strategic Leadership Skills", url: "https://www.example.com/course10" },
+          {
+            name: "Leadership Essentials",
+            url: "https://www.example.com/course9",
+          },
+          {
+            name: "Strategic Leadership Skills",
+            url: "https://www.example.com/course10",
+          },
         ],
       },
       {
@@ -529,8 +559,14 @@ const detailedSkillCompetenciesScript = (
         requirements:
           "Building and maintaining professional relationships that benefit career growth.",
         courses: [
-          { name: "Networking Strategies for Career Growth", url: "https://www.example.com/course11" },
-          { name: "Mastering Professional Networking", url: "https://www.example.com/course12" },
+          {
+            name: "Networking Strategies for Career Growth",
+            url: "https://www.example.com/course11",
+          },
+          {
+            name: "Mastering Professional Networking",
+            url: "https://www.example.com/course12",
+          },
         ],
       },
     ],
