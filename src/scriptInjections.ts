@@ -28,10 +28,10 @@ const componentsScript = () => {
       const { borderClass, bgClass, textClass, svgFill } = getCategoryStyles(category);
 
       return \`
-        <div class="flex items-center justify-between min-w-[200px] max-w-[288px] \${borderClass} \${bgClass} rounded-lg m-1 py-1 px-2" style="border-width: 1px;">
-            <p class="flex-1 text-xs font-semibold \${textClass}">\${text}</p>
-            <a href="\${hyperlink}" class="text-xs \${textClass}">
-<svg class="opacity-50" width="18px" height="18px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div class="flex items-center justify-between min-w-[200px] max-w-[288px] \${borderClass} \${bgClass} rounded-md m-1 py-1 px-2" style="border-width: 1px;">
+            <p class="flex-1 text-xs !text-[0.6rem] font-semibold \${textClass}">\${text}</p>
+            <a href="\${hyperlink}" class="text-xs !text-[0.6rem] \${textClass}">
+<svg class="opacity-50" width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M14 5C13.4477 5 13 4.55228 13 4C13 3.44772 13.4477 3 14 3H20C20.5523 3 21 3.44772 21 4V10C21 10.5523 20.5523 11 20 11C19.4477 11 19 10.5523 19 10V6.41421L11.7071 13.7071C11.3166 14.0976 10.6834 14.0976 10.2929 13.7071C9.90237 13.3166 9.90237 12.6834 10.2929 12.2929L17.5858 5H14ZM5 7C4.44772 7 4 7.44772 4 8V19C4 19.5523 4.44772 20 5 20H16C16.5523 20 17 19.5523 17 19V14.4375C17 13.8852 17.4477 13.4375 18 13.4375C18.5523 13.4375 19 13.8852 19 14.4375V19C19 20.6569 17.6569 22 16 22H5C3.34315 22 2 20.6569 2 19V8C2 6.34315 3.34315 5 5 5H9.5625C10.1148 5 10.5625 5.44772 10.5625 6C10.5625 6.55228 10.1148 7 9.5625 7H5Z" fill="\${svgFill}"/>
 </svg>
             </a>
@@ -41,13 +41,13 @@ const componentsScript = () => {
 
     function createCategoryList(name, index) {
       const separator = String.fromCharCode(65 + index);
-      return \`<div class="my-2 py-2" data-index="\${index}">
-      <p class="text-gray-700 text-md"><span class="font-bold text-base">\${separator}.</span> \${name}</p>
+      return \`<div class="my-2 py-1" data-index="\${index}">
+      <p class="text-gray-700 text-sm"><span class="font-bold text-base">\${separator}.</span> \${name}</p>
       </div>\`;
     }
   </script>
-  `
-}
+  `;
+};
 
 const skillCompetenciesScript = (
   skillsDefine: any,
@@ -433,8 +433,17 @@ const labelDotsPlugin = {
                             },
                             pointLabels: {
                                 display: true,
-                                callback: (value) => value.split('\\n')
-                            }
+                                callback: (value) => {
+                                  const separator = String.fromCharCode(65 + index); 
+                                  const newValue = \`\${separator}. \${value}\`\; 
+                                  return newValue.split('\\n');
+                                }
+                            },
+                            font: {
+                              family: 'Arial',
+                              size: 14,
+                              weight: 'bold',
+                            },
                         }
                     },
                     plugins: {
@@ -456,79 +465,82 @@ const labelDotsPlugin = {
 }
 
 const detailedSkillCompetenciesScript = (
-  skillsChartDefine: string,
-  competenciesChartDefine: string,
+  skillsDefine: string,
+  competenciesDefine: string,
   USE_MOCK_DATA: boolean
 ) => {
+  const mockData = {
+    skills: [
+      {
+        name: "Digital Dexterity",
+        score: { prev: 3, target: 4, current: 4 },
+        requirements:
+          "Understanding and utilizing modern digital tools and technologies.",
+        courses: [
+          { name: "Introduction to Digital Tools", url: "https://www.example.com/course1" },
+          { name: "Advanced Digital Skills for Professionals", url: "https://www.example.com/course2" },
+        ],
+      },
+      {
+        name: "Legal Project Management",
+        score: { prev: 4, target: 6, current: 5 },
+        requirements:
+          "Effective management of legal projects, teams, and resources.",
+        courses: [
+          { name: "Legal Project Management Fundamentals", url: "https://www.example.com/course3" },
+          { name: "Managing Legal Risks", url: "https://www.example.com/course4" },
+        ],
+      },
+      {
+        name: "Business Development",
+        score: { prev: 2, target: 4, current: 3 },
+        requirements:
+          "Understanding of market trends and ability to develop strategies to grow business.",
+        courses: [
+          { name: "Market Analysis and Business Strategies", url: "https://www.example.com/course5" },
+          { name: "Advanced Business Development Techniques", url: "https://www.example.com/course6" },
+        ],
+      },
+    ],
+    competencies: [
+      {
+        name: "Collaboration & Teamwork",
+        score: { prev: 5, target: 6, current: 5 },
+        requirements:
+          "Ability to work effectively with others to achieve common goals.",
+        courses: [
+          { name: "Team Collaboration in the Workplace", url: "https://www.example.com/course7" },
+          { name: "Effective Communication in Teams", url: "https://www.example.com/course8" },
+        ],
+      },
+      {
+        name: "Leadership",
+        score: { prev: 4, target: 7, current: 6 },
+        requirements:
+          "Inspiring and leading teams towards success, with focus on decision-making and management.",
+        courses: [
+          { name: "Leadership Essentials", url: "https://www.example.com/course9" },
+          { name: "Strategic Leadership Skills", url: "https://www.example.com/course10" },
+        ],
+      },
+      {
+        name: "Networking",
+        score: { prev: 3, target: 5, current: 4 },
+        requirements:
+          "Building and maintaining professional relationships that benefit career growth.",
+        courses: [
+          { name: "Networking Strategies for Career Growth", url: "https://www.example.com/course11" },
+          { name: "Mastering Professional Networking", url: "https://www.example.com/course12" },
+        ],
+      },
+    ],
+  };
+  const injectData = `{ skills: <%- JSON.stringify(${skillsDefine}) %> , competencies: <%- JSON.stringify(${competenciesDefine}) %> }`;
+
   return `
   <script>
   function detailedSkillCompetenciesScript(dataType) {
-    const data = {
-      skills: [
-        {
-          name: "Digital Dexterity",
-          score: { prev: 3, target: 4, current: 4 },
-          requirements:
-            "Understanding and utilizing modern digital tools and technologies.",
-          courses: [
-            { name: "Introduction to Digital Tools", url: "https://www.example.com/course1" },
-            { name: "Advanced Digital Skills for Professionals", url: "https://www.example.com/course2" },
-          ],
-        },
-        {
-          name: "Legal Project Management",
-          score: { prev: 4, target: 6, current: 5 },
-          requirements:
-            "Effective management of legal projects, teams, and resources.",
-          courses: [
-            { name: "Legal Project Management Fundamentals", url: "https://www.example.com/course3" },
-            { name: "Managing Legal Risks", url: "https://www.example.com/course4" },
-          ],
-        },
-        {
-          name: "Business Development",
-          score: { prev: 2, target: 4, current: 3 },
-          requirements:
-            "Understanding of market trends and ability to develop strategies to grow business.",
-          courses: [
-            { name: "Market Analysis and Business Strategies", url: "https://www.example.com/course5" },
-            { name: "Advanced Business Development Techniques", url: "https://www.example.com/course6" },
-          ],
-        },
-      ],
-      competencies: [
-        {
-          name: "Collaboration & Teamwork",
-          score: { prev: 5, target: 6, current: 5 },
-          requirements:
-            "Ability to work effectively with others to achieve common goals.",
-          courses: [
-            { name: "Team Collaboration in the Workplace", url: "https://www.example.com/course7" },
-            { name: "Effective Communication in Teams", url: "https://www.example.com/course8" },
-          ],
-        },
-        {
-          name: "Leadership",
-          score: { prev: 4, target: 7, current: 6 },
-          requirements:
-            "Inspiring and leading teams towards success, with focus on decision-making and management.",
-          courses: [
-            { name: "Leadership Essentials", url: "https://www.example.com/course9" },
-            { name: "Strategic Leadership Skills", url: "https://www.example.com/course10" },
-          ],
-        },
-        {
-          name: "Networking",
-          score: { prev: 3, target: 5, current: 4 },
-          requirements:
-            "Building and maintaining professional relationships that benefit career growth.",
-          courses: [
-            { name: "Networking Strategies for Career Growth", url: "https://www.example.com/course11" },
-            { name: "Mastering Professional Networking", url: "https://www.example.com/course12" },
-          ],
-        },
-      ],
-    };
+    const data = ${USE_MOCK_DATA ? JSON.stringify(mockData) : injectData};
 
     const createElementInfo = (skill, category, index) => {
       const { name, requirements, courses, score } = skill;
@@ -536,7 +548,7 @@ const detailedSkillCompetenciesScript = (
 
       if (score.current >= score.target) {
         return \`
-          <div class="m-4 p-4 bg-white rounded-lg" style="background-color:#e6e6e6">
+          <div class="m-4 p-4 bg-white rounded-md" style="background-color:#e6e6e6">
             <p class="text-xs font-bold flex items-center" style="color: #4BC0C0">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4BC0C0" class="bi bi-check-circle mr-2" viewBox="0 0 16 16">
                 <path d="M8 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm3.854-9.854a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7 8.793l3.146-3.147a.5.5 0 0 1 .708 0z"/>
@@ -548,7 +560,7 @@ const detailedSkillCompetenciesScript = (
       }
 
       return \`
-        <div class="m-4 p-4 bg-white rounded-lg">
+        <div class="m-4 p-4 bg-white rounded-md">
           <p class="text-xs font-bold" style="color: #4BC0C0">\${name}</p>
 
           <div class="flex mt-2">
@@ -562,7 +574,7 @@ const detailedSkillCompetenciesScript = (
                 \${courses
                   .map(
                     (course) => \`<li><a href="\${course.url}" class="text-xs \${textClass}">
-                     <div class="ml-4">\${createSummaryTabs(course.name, category, course.url)}</div>
+                     <div class="">\${createSummaryTabs(course.name, category, course.url)}</div>
                     </a></li>\`
                   )
                   .join("")}
@@ -580,9 +592,9 @@ const detailedSkillCompetenciesScript = (
       .map((item, index) => {
         const { name, score } = item;
         return \`
-          <div class="mt-2 mb-8">
-            <p class="text-gray-700 text-md"><span class="font-bold text-base">\${index + 1}.</span> \${name}</p>
-            <ul class="flex items-center space-x-2 mx-4 my-2">
+          <div class="mt-1 mb-8 pr-6">
+            \${createCategoryList(name, index)}
+            <ul class="flex items-center space-x-2 mx-4 my-2 text-sm">
               <li style="color: grey">2023 Banding: <strong>\${score.prev}</strong></li>
               <li><span class="w-1 h-1 bg-gray-400 rounded-full inline-block opacity-50"></span></li>
               <li style="color: #36A2EB">Current Banding: <strong>\${score.current}</strong></li>
@@ -608,9 +620,288 @@ const detailedSkillCompetenciesScript = (
   `;
 };
 
+const bandingScript = (
+  bandingSkillsDefine: string,
+  bandingCompetenciesDefine: string,
+  USE_MOCK_DATA: boolean
+) => {
+  const mockSkillsBandingData = [
+    {
+      name: "Digital Dexterity",
+      score: {
+        current: 3,
+        prev: 2,
+        target: 5,
+      },
+      bandings: {
+        1: {
+          requirements:
+            "Basic awareness of digital tools and technologies, with an ability to use them for simple tasks.",
+        },
+        2: {
+          requirements:
+            "Ability to effectively use digital tools for routine tasks, with some understanding of their functionalities and integration.",
+        },
+        3: {
+          requirements:
+            "Proficient in using digital tools to optimize daily tasks; familiar with multiple tools and how they integrate in a digital workspace.",
+        },
+        4: {
+          requirements:
+            "Advanced proficiency in utilizing digital tools for complex tasks, with an understanding of automation and integration across platforms.",
+        },
+        5: {
+          requirements:
+            "Expert in integrating and managing multiple digital tools, utilizing them for strategic decision-making and workflow optimization.",
+        },
+        6: {
+          requirements:
+            "Thought leader in digital technologies; able to guide and train others, driving innovation and transformation in the digital workspace.",
+        },
+      },
+    },
+    {
+      name: "Communication Skills",
+      score: {
+        current: 4,
+        prev: 3,
+        target: 6,
+      },
+      bandings: {
+        1: {
+          requirements:
+            "Able to clearly communicate basic ideas in written and verbal formats, with some awareness of audience and context.",
+        },
+        2: {
+          requirements:
+            "Able to convey ideas and information clearly in both written and verbal formats, understanding the importance of tone and clarity for different audiences.",
+        },
+        3: {
+          requirements:
+            "Skilled in communicating complex ideas effectively; adjusts communication style to suit the audience and context.",
+        },
+        4: {
+          requirements:
+            "Expert communicator, able to engage diverse audiences and effectively manage difficult conversations or negotiations.",
+        },
+        5: {
+          requirements:
+            "Able to lead communication strategies, influencing key stakeholders and guiding teams through complex projects and discussions.",
+        },
+        6: {
+          requirements:
+            "A recognized thought leader in communication, shaping organizational strategies, culture, and aligning teams through effective communication.",
+        },
+      },
+    },
+    {
+      name: "Problem Solving",
+      score: {
+        current: 5,
+        prev: 4,
+        target: 6,
+      },
+      bandings: {
+        1: {
+          requirements:
+            "Able to approach simple problems with standard solutions, using basic critical thinking skills.",
+        },
+        2: {
+          requirements:
+            "Able to identify problems and propose logical solutions, using basic analysis and reasoning.",
+        },
+        3: {
+          requirements:
+            "Able to tackle complex problems by breaking them down into smaller components and applying structured problem-solving techniques.",
+        },
+        4: {
+          requirements:
+            "Proficient at addressing complex and ambiguous problems, with an ability to synthesize information and propose innovative solutions.",
+        },
+        5: {
+          requirements:
+            "Able to solve high-impact problems that influence strategic decisions, leveraging advanced problem-solving frameworks and techniques.",
+        },
+        6: {
+          requirements:
+            "Recognized as an expert in problem solving, able to guide teams through the most challenging and ambiguous issues, driving organizational change.",
+        },
+      },
+    },
+    {
+      name: "Leadership",
+      score: {
+        current: 6,
+        prev: 5,
+        target: 6,
+      },
+      bandings: {
+        1: {
+          requirements:
+            "Demonstrates basic leadership qualities, including the ability to manage small teams and make decisions for routine tasks.",
+        },
+        2: {
+          requirements:
+            "Able to lead teams for more complex projects, taking responsibility for decisions and providing guidance for others.",
+        },
+        3: {
+          requirements:
+            "Skilled in leading teams of varying sizes, ensuring alignment to organizational goals and adapting leadership style to meet team needs.",
+        },
+        4: {
+          requirements:
+            "Able to lead cross-functional teams, aligning multiple stakeholders and fostering collaboration to drive major initiatives and strategic outcomes.",
+        },
+        5: {
+          requirements:
+            "A strong strategic leader, able to lead large teams or departments, develop organizational strategies, and manage complex change initiatives.",
+        },
+        6: {
+          requirements:
+            "Visionary leader, able to inspire and drive transformation at an organizational level, influencing culture, and shaping the future direction of the company.",
+        },
+      },
+    },
+    {
+      name: "Project Management",
+      score: {
+        current: 5,
+        prev: 3,
+        target: 5,
+      },
+      bandings: {
+        1: {
+          requirements:
+            "Able to manage basic projects with clear goals, deadlines, and deliverables, using basic project management tools.",
+        },
+        2: {
+          requirements:
+            "Capable of managing more complex projects, ensuring deliverables are met within scope, time, and budget constraints.",
+        },
+        3: {
+          requirements:
+            "Experienced in managing projects with multiple stakeholders, risks, and changing requirements, while maintaining focus on outcomes.",
+        },
+        4: {
+          requirements:
+            "Able to lead large, cross-functional projects, managing project teams, resources, and timelines to deliver strategic business results.",
+        },
+        5: {
+          requirements:
+            "Skilled in overseeing a portfolio of projects, with an ability to optimize resource allocation, manage interdependencies, and mitigate risks.",
+        },
+        6: {
+          requirements:
+            "A recognized expert in project management, capable of leading large-scale, transformative initiatives and guiding others in advanced project management methodologies.",
+        },
+      },
+    },
+  ];
+
+  const mockCompetenciesBandingData = mockSkillsBandingData;
+  const bandingSkills = USE_MOCK_DATA
+    ? JSON.stringify(mockSkillsBandingData)
+    : `<%- JSON.stringify(${bandingSkillsDefine}) %>`;
+  const bandingCompetencies = USE_MOCK_DATA
+    ? JSON.stringify(mockCompetenciesBandingData)
+    : `<%- JSON.stringify(${bandingCompetenciesDefine}) %>`;
+
+  return `<script>
+  const bandingSkillsData = ${bandingSkills}
+  const bandingCompetenciesData = ${bandingCompetencies}
+ // Function to generate banding elements from the provided data
+  function generateBandingElements(data) {
+    return data
+      .map((element, index) => {
+        const { name, bandings, score } = element;
+
+        return \`
+          <div class="mt-2 mb-8">\${createCategoryList(name, index)}
+          <div class="m-4 p-0 bg-white rounded-lg overflow-hidden">
+              <table class="min-w-full table-auto border-collapse">
+                <thead>
+                  <tr class="bg-black text-white">
+                    <th class="px-2 py-2 text-center text-xs">BAND</th>
+                    <th class="px-2 py-2 text-left text-xs">REQUIREMENTS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  \${Object.entries(bandings)
+                    .map(([banding, { requirements }]) => {
+                      let bandingContent = \`<span>\${banding}</span>\`; // Default plain number
+
+                      // Check if current and target are the same
+                      if (parseInt(banding) === score.current && parseInt(banding) === score.target) {
+                        bandingContent = \`
+                          <div class="flex flex-col items-center">
+                            <div class="relative">
+                              <div class="w-7 h-7 rounded-full border-4 text-white flex items-center justify-center text-xs font-bold" style="background-color: #4BC0C0; border-color:#113B97">
+                                \${banding}
+                              </div>
+                            </div>
+                            <span class="text-xs mt-1 !text-[0.6rem]" style="color: #4BC0C0"><p>TARGET</p><p>ACHIEVED</p></span>
+                          </div>\`;
+                      } else if (parseInt(banding) === score.current) {
+                        bandingContent = \`
+                          <div class="flex flex-col items-center">
+                            <div class="w-5 h-5 rounded-full text-white flex items-center justify-center text-xs font-bold" style="background-color: #113B97">\${banding}</div>
+                            <span class="text-xs mt-1 !text-[0.6rem]" style="color: #113B97">CURRENT</span>
+                          </div>\`;
+                      } else if (parseInt(banding) === score.prev) {
+                        bandingContent = \`
+                          <div class="flex flex-col items-center">
+                            <div class="w-5 h-5 rounded-full bg-gray-400 text-white flex items-center justify-center text-xs font-bold">\${banding}</div>
+                            <span class="text-xs text-gray-400 mt-1 !text-[0.6rem]">2023</span>
+                          </div>\`;
+                      } else if (parseInt(banding) === score.target) {
+                        bandingContent = \`
+                          <div class="flex flex-col items-center">
+                            <div class="w-5 h-5 rounded-full text-white flex items-center justify-center text-xs font-bold" style="background-color: #4BC0C0">\${banding}</div>
+                            <span class="text-xs mt-1 !text-[0.6rem]" style="color: #4BC0C0">TARGET</span>
+                          </div>\`;
+                      }
+
+                      return \`
+                        <tr class="odd:bg-gray-100 even:bg-gray-50">
+                          <td class="px-4 py-2 text-center text-xs">\${bandingContent}</td>
+                          <td class="px-4 py-2 text-xs text-gray-600">\${requirements}</td>
+                        </tr>
+                      \`;
+                    })
+                    .join("")}
+                </tbody>
+              </table>
+              </div>
+              </div>
+        \`;
+      })
+      .join("");
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Generate banding elements for skills and competencies
+    const bandingSkillsElements = generateBandingElements(bandingSkillsData);
+    const bandingCompetenciesElements = generateBandingElements(bandingCompetenciesData);
+
+    // Insert the generated content into the respective containers
+    const bandingSkillsContainer = document.querySelector('#banding-skills');
+    const bandingCompetenciesContainer = document.querySelector('#banding-competencies');
+
+    if (bandingSkillsContainer) {
+      bandingSkillsContainer.innerHTML = bandingSkillsElements;
+    }
+
+    if (bandingCompetenciesContainer) {
+      bandingCompetenciesContainer.innerHTML = bandingCompetenciesElements;
+    }
+  });
+  </script>`;
+};
+
 export {
   componentsScript,
   skillCompetenciesScript,
   reportScript,
   detailedSkillCompetenciesScript,
+  bandingScript,
 };
