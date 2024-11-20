@@ -392,7 +392,106 @@ const labelDotsPlugin = {
             }
         };
 
-        Chart.register(alternatingBackgroundPlugin, labelDotsPlugin);
+            const customLegendPlugin = {
+  id: 'customLegend',
+  afterDraw: (chart) => {
+    const { ctx } = chart;
+    const datasets = chart.data.datasets;
+    const legendX = chart.width / 3; 
+    const legendY = chart.height - 30; 
+
+    ctx.font = '11px Arial';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+
+    const lineLength = 40;
+    const dotRadius = 4;
+    const largerDotRadius = 9;
+    const spacing = 15;
+    const textSpacing = 10;
+
+    let offsetX = legendX - (datasets.length * (lineLength + spacing + textSpacing)) / 2;
+
+    const drawItem = (dataset, midX, midY, isCurrent) => {
+      // Draw line
+      ctx.beginPath();
+      ctx.moveTo(offsetX, midY);
+      ctx.lineTo(offsetX + lineLength, midY);
+      ctx.strokeStyle = dataset.borderColor;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Draw dot
+      ctx.beginPath();
+      ctx.arc(midX, midY, largerDotRadius, 0, Math.PI * 2);
+      ctx.fillStyle = dataset.borderColor;
+      ctx.fill();
+
+      // Draw square (only for current banding)
+    if (isCurrent) {
+    // Directly split by commas and remove extra spaces
+    const rgba = dataset.borderColor.replace(/[rgba()]/g, '').split(',').map(val => val.trim());
+
+    if (rgba.length >= 3) {
+        const [r, g, b] = rgba;  // Red, Green, Blue values
+        const a = rgba.length === 4 ? rgba[3] : 1;  // Alpha value (defaults to 1 if not provided)
+        
+        const lighterFill = \`rgba(\${r}, \${g}, \${b-100}, 0.5)\`\;  // Set alpha to 0.5 for lighter fill
+        // Apply the lighter fill color to the context
+        ctx.fillStyle = lighterFill;
+        ctx.fillRect(midX - lineLength / 2, midY, lineLength, largerDotRadius * 1.5);
+    } else {
+        console.error("Invalid color format:", dataset.borderColor);  // If format is invalid
+    }
+}
+
+      // Add "N" in the dot (only for current banding)
+      ctx.save();
+      ctx.font = '10px Arial';
+      ctx.fillStyle = 'white';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('N', midX, midY);
+      ctx.restore();
+    };
+
+    datasets.forEach((dataset, index) => {
+      const midX = offsetX + lineLength / 2;
+      const midY = legendY;
+
+      if (index === 0) {
+        // 2023 Banding - Line and Dot only (no square, no "N")
+        ctx.beginPath();
+        ctx.moveTo(offsetX, midY);
+        ctx.lineTo(offsetX + lineLength, midY);
+        ctx.strokeStyle = dataset.borderColor;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(midX, midY, dotRadius, 0, Math.PI * 2);
+        ctx.fillStyle = dataset.borderColor;
+        ctx.fill();
+      } else if (index === 1) {
+        // Current Banding (index 1) - Line, Dot, Square, and "N"
+        drawItem(dataset, midX, midY, true);
+      } else if (index === 2) {
+        // Target Banding (index 2) - Line and Dot only (no square) and "N"
+        drawItem(dataset, midX, midY, false);
+      }
+
+      // Draw the label
+      ctx.fillStyle = 'black';
+      ctx.fillText(dataset.label, offsetX + lineLength + textSpacing, legendY);
+
+      // Move to the next legend item
+      offsetX += lineLength + spacing + ctx.measureText(dataset.label).width + textSpacing;
+    });
+  },
+};
+
+
+        Chart.register(alternatingBackgroundPlugin, labelDotsPlugin, customLegendPlugin);
 
         // Create the radar chart for both charts
         const chartId = 'radar-chart-' + chartType.toLowerCase();
@@ -448,7 +547,7 @@ const labelDotsPlugin = {
                     },
                     plugins: {
                         legend: {
-                            display: true,
+                            display: false,
                             position: 'bottom'
                         },
                         tooltip: {
