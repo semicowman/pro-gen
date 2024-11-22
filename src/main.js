@@ -755,6 +755,22 @@ const modifyPdfHeaders = async (name, extractedHeadingTitles) => {
     
     backFillPuppeteerMargins();
     drawTexts();
+
+
+    if (
+      (extractedHeadingTitles[pageIndex] === "skills" && extractedHeadingTitles[pageIndex + 1] === "competencies") ||
+      (extractedHeadingTitles[pageIndex] === "competencies" && extractedHeadingTitles[pageIndex + 1] === "skills") ||
+      pageIndex === pages.length - 1
+    ) {
+      page.drawRectangle({
+        x: startingTextPosition,
+        y: 0+60,
+        width: 520,
+        height: 1,
+        color: rgb(0.5,0.5,0.5),
+        opacity: 0.5
+      });
+    }
   });
 
   const modifiedPdfBytes = await pdfDoc.save();
