@@ -13,7 +13,6 @@ const PAGE_TITLE = "Custom Profile";
 const BIND_DEFINES = {
   fname: "fname",
   date: "date",
-  pages: "pages",
   skills: "skills",
   competencies: "competencies",
   skillChart: "skillChart",
@@ -51,22 +50,6 @@ function scriptDefines(): string {
 }
 
 const HrSeperator = () => `<hr class="w-[40%] m-0 border-gray-500 opacity-50">`;
-
-function createHeader(
-  ctn1Name: string,
-  ctn2Name: string,
-  ctn3Name: string,
-  ctn4Name: string
-): string {
-  return `
-    <div class="flex w-full text-xs !text-[0.6rem] m-2 p-2 gap-2">
-        <div class="basis-1/10">${ctn1Name}</div>
-        <div class="basis-1/10 text-gray-500">${ctn2Name}</div>
-        <div class="basis-1/10 text-gray-500">${ctn3Name}</div>
-        <div class="flex-grow ml-auto">${ctn4Name}</div>
-    </div>
-    `;
-}
 
 function generateSummaryPage(): string {
   const logoSrc =
@@ -196,12 +179,6 @@ function generateHtmlFile(
 
 function bodyContent(): string {
   return `
-    ${createHeader(
-      "Introduction",
-      bindMyValue(BIND_DEFINES.fname),
-      bindMyValue(BIND_DEFINES.date),
-      bindMyValue(BIND_DEFINES.pages)
-    )}
     <div class="ml-2">
       <div class="break-after-page">
       ${generateSummaryPage()}

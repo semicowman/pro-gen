@@ -2,6 +2,8 @@ import puppeteer from "puppeteer";
 import fs from "fs";
 import path from "path";
 import ejs from "ejs";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { getDocument } from "pdfjs-dist/legacy/build/pdf.min.mjs";
 
 // Function to format a URL as a valid filename
 function formatUrlToFilename(url) {
@@ -610,7 +612,7 @@ async function printPDFFromTemplate(templatePath) {
     printBackground: true,
     scale: 1,
     margin: {
-      top: "0mm",
+      top: "20mm",
       right: "0mm",
       bottom: "0mm",
       left: "0mm",
@@ -619,6 +621,144 @@ async function printPDFFromTemplate(templatePath) {
 
   await browser.close();
   return pdfBuffer;
+}
+
+async function extractPdfData(pdfBuffer) {
+  const pdf = await getDocument(pdfBuffer).promise;
+  const extractedStrings = [];
+  let prevValue = "";
+  let newValue = "";
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    const page = await pdf.getPage(pageNum);
+
+    const textContent = await page.getTextContent();
+    const textItems = textContent.items.map(item => item.str);
+    const pageText = textItems.join(' ');
+
+    if (pageNum == 1) {
+      newValue = "introduction"
+    } else if (pageText.includes("Skills SCORE Report") || pageText.includes("Skill Banding Structure")) {
+      newValue = "skills"
+    } else if (pageText.includes("Competencies SCORE Report") || pageText.includes("Competencies Banding Structure")) {
+      newValue = "competencies"
+    } else {
+      newValue = prevValue
+    }
+
+    extractedStrings.push(newValue);
+    prevValue = newValue
+  }
+
+  return extractedStrings;
+}
+
+const modifyPdfHeaders = async (name, extractedHeadingTitles) => {
+  const existingPdfBytes = fs.readFileSync('src/index.pdf');
+  const pdfDoc = await PDFDocument.load(existingPdfBytes);
+
+  const pages = pdfDoc.getPages();
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  pages.forEach((page, pageIndex) => {
+    const { width, height } = page.getSize();
+
+    const headers = extractedHeadingTitles
+    const title = headers[pageIndex].toUpperCase().split('')
+
+    const backgroundColor = rgb(0.941, 0.941, 0.941);
+    const textColor = rgb(0, 0, 0);
+    const subtextColor = rgb(0.5, 0.5, 0.5);
+    const textSize = 8;
+    const titleColor = headers[pageIndex].toLowerCase() === "skills"
+    ? rgb(21 / 255, 58 / 255, 124 / 255)
+    : headers[pageIndex].toLowerCase() === "competencies"
+    ? rgb(153 / 255, 27 / 255, 27 / 255)
+    : textColor;  
+    
+    const startingHeight = height - 30
+    const startingTextPosition = 30;
+    const textSpacing = 20
+
+    const backFillPuppeteerMargins = () => {
+      page.drawRectangle({
+        x: 0,
+        y: height - 60,
+        width: 1000,
+        height: 500,
+        color: backgroundColor,
+      });
+    }
+
+    const drawTexts = () => {
+      // const firstTextWidth = font.widthOfTextAtSize(title, textHeight);
+      // page.drawText(title, {
+        // x: startingTextPosition,
+        // y: startingHeight,
+        // size: textSize+2,
+        // font: font,
+        // color: textColor, 
+      // });
+      let xStart = startingTextPosition
+      title.forEach((character, index) => {
+        const kerning = 1;
+        const charWidth = font.widthOfTextAtSize(character, textSize)
+        
+        page.drawText(character, {
+          x: xStart,
+          y: startingHeight,
+          size: textSize,
+          font: font,
+          color: titleColor, 
+        })
+    
+        xStart += charWidth + kerning
+      })
+
+      const standardTextSize = 8;
+      const secondTextWidth = font.widthOfTextAtSize(name, standardTextSize);
+      page.drawText(name, {
+        x: startingTextPosition * 3 + textSpacing,
+        y: startingHeight,
+        size: textSize,
+        font: font,
+        color: subtextColor
+      });
+
+      const currentDate = new Date().toLocaleString()
+      const thirdTextWidth = font.widthOfTextAtSize(currentDate, standardTextSize);
+      page.drawText(currentDate, {
+        x: startingTextPosition * 5 + textSpacing,
+        y: startingHeight,
+        size: textSize,
+        font: font,
+        color: subtextColor
+      });
+
+      page.drawEllipse({
+        x: startingTextPosition * 5.55,
+        y: startingHeight + 2,
+        xScale: 1,
+        yScale: 1,
+        color: subtextColor,
+        opacity: 0.5
+      });
+      
+      const pageTextWidth = font.widthOfTextAtSize((pageIndex+1).toString(), standardTextSize);
+      page.drawText((pageIndex+1).toString(), {
+        x: 550,
+        y: startingHeight,
+        size: textSize,
+        font: boldFont,
+        color: subtextColor,
+      });
+    }
+    
+    backFillPuppeteerMargins();
+    drawTexts();
+  });
+
+  const modifiedPdfBytes = await pdfDoc.save();
+  fs.writeFileSync('src/output-all-pages.pdf', modifiedPdfBytes);
 }
 
 async function generatePDFsFromFile(filePaths) {
@@ -631,6 +771,12 @@ async function generatePDFsFromFile(filePaths) {
       // Save the buffer to a file
       fs.writeFileSync(outputPath, pdfBuffer);
       console.log(`PDF saved successfully as ${filename}`);
+
+      const extractedHeadingTitles = await extractPdfData(pdfBuffer);
+      console.log("PDF data extracted successfully.");
+
+      await modifyPdfHeaders("My name here", extractedHeadingTitles);
+      console.log("PDF headers modified successfully.");
     } catch (error) {
       console.error(`Error generating PDF for ${filePath}:`, error);
     }
